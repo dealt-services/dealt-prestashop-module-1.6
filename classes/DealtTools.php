@@ -52,9 +52,8 @@ class DealtTools
     {
         $UUIDv4 = '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i';
 
-        return (bool) preg_match($UUIDv4, $uuid);
+        return (bool)preg_match($UUIDv4, $uuid);
     }
-
 
 
     /**
@@ -70,13 +69,14 @@ class DealtTools
     public static function getProductFromCart(Cart $cart, $productId, $productAttributeId = null)
     {
         $cartProducts = $cart->getProducts();
-
-        foreach ($cartProducts as $cartProduct) {
-            if (
-                (int) $cartProduct['id_product'] == $productId &&
-                ($productAttributeId == null || ((int) $cartProduct['id_product_attribute'] == $productAttributeId))
-            ) {
-                return $cartProduct;
+        if(!empty($cartProducts)){
+            foreach ($cartProducts as $cartProduct) {
+                if (
+                    (int)$cartProduct['id_product'] == $productId &&
+                    ($productAttributeId == null || ((int)$cartProduct['id_product_attribute'] == $productAttributeId))
+                ) {
+                    return $cartProduct;
+                }
             }
         }
 
@@ -150,6 +150,7 @@ class DealtTools
             return false;
         }
     }
+
     /**
      * @param product $productObj
      * @param array $categories_ids
@@ -165,9 +166,9 @@ class DealtTools
                 continue;
             }
 
-            $maxpos = (int) Db::getInstance()->getValue('SELECT MAX(position) as maxpos FROM ' . _DB_PREFIX_ . 'category_product WHERE id_category=' . (int) $catObject->id);
+            $maxpos = (int)Db::getInstance()->getValue('SELECT MAX(position) as maxpos FROM ' . _DB_PREFIX_ . 'category_product WHERE id_category=' . (int)$catObject->id);
             //insert product category assossiations
-            $sql_values = '(' . (int) $catObject->id_category . ', ' . (int) $productObj->id . ', ' . ($maxpos + 1) . ')';
+            $sql_values = '(' . (int)$catObject->id_category . ', ' . (int)$productObj->id . ', ' . ($maxpos + 1) . ')';
 
             if (!empty($sql_values)) {
                 try {
@@ -200,7 +201,7 @@ class DealtTools
             }
 
             //insert product category assossiations
-            $sql_values = '(' . (int) $Offer->id . ', ' . (int) $Offer->id_dealt_product . ', ' .(int) $catObject->id . ')';
+            $sql_values = '(' . (int)$Offer->id . ', ' . (int)$Offer->id_dealt_product . ', ' . (int)$catObject->id . ')';
 
             if (!empty($sql_values)) {
                 try {
@@ -217,6 +218,7 @@ class DealtTools
 
         return $Offer;
     }
+
     /**
      * Create the internal DealtModule category
      * -> used for virtual dealt products
@@ -238,7 +240,7 @@ class DealtTools
         $category->description = 'Internal DealtModule category used for Dealt offer virtual products';
 
         $category->add();
-        if($category->id){
+        if ($category->id) {
             \Configuration::updateValue('DEALT_MODULE_PRODUCT_CATEGORY', $category->id);
             return true;
         }
@@ -263,6 +265,7 @@ class DealtTools
 
         return true;
     }
+
     /**
      * @param mixed $quantity
      *
@@ -270,8 +273,8 @@ class DealtTools
      */
     public static function getFormattedPrice(DealtOffer $offer, $id_currency, $quantity = 1)
     {
-        $quantity = (int) ($quantity == false ? 1 : $quantity);
-        $currency=new Currency($id_currency);
+        $quantity = (int)($quantity == false ? 1 : $quantity);
+        $currency = new Currency($id_currency);
 
         return \Tools::displayPrice(
             self::getPrice($offer->id_dealt_product, 0, $quantity),
@@ -288,8 +291,8 @@ class DealtTools
      */
     public static function getPrice($id_product, $id_product_attribute, $quantity = 1)
     {
-        if(empty(Context::getContext()->employee)){
-            Context::getContext()->employee= new Employee(1);
+        if (empty(Context::getContext()->employee)) {
+            Context::getContext()->employee = new Employee(1);
         }
 
         return \Product::getPriceStatic(
@@ -303,4 +306,36 @@ class DealtTools
             $quantity
         );
     }
+
+    /**
+     * Resolves the dealt offers from the current
+     * cart products.
+     *
+     *
+     * @param Cart $cart
+     * @return array|PrestaShopCollection
+     */
+    public static function getDealtOffersFromCart(Cart $cart)
+    {
+        try {
+            $cartProducts = $cart->getProducts();
+            $cartProductIds = array_map(function ($cartProduct) {
+                return (int)$cartProduct['id_product'];
+            }, $cartProducts);
+            if (count($cartProductIds) <= 0) {
+                return [];
+            }
+
+            $id_lang = Context::getContext()->language->id;
+            $offers = new PrestaShopCollection('DealtOffer', $id_lang);
+            $offers->where('id_dealt_product', 'in', $cartProductIds);
+            return $offers;
+
+        } catch (Exception $e) {
+            /* cart may not exist yet in DB and will make internal cart methods crash */
+            DealtModuleLogger::log('Something went wrong when in offer search from cart', DealtModuleLogger::TYPE_ERROR, ['Error' => $e]);
+        }
+        return [];
+    }
+
 }

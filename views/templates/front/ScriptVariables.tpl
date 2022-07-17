@@ -11,6 +11,7 @@
 
 <script>
     var dealt_module_ajax_uri = '{$dealt_module_ajax_uri}';
+    var dealt_module_js_uri = '{$dealt_module_js_uri}';
     var dealt_module_ajax_token = '{$dealt_module_ajax_token}';
     var dealt_module_customer = '{$dealt_module_customer|intval}';
     var dealt_module_currency = '{$dealt_module_currency|intval}';

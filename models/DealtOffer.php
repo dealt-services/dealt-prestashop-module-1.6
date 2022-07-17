@@ -46,6 +46,26 @@ class DealtOffer extends ObjectModel
 
     }
 
+    public static function findOneByUUID($dealtOfferId)
+    {
+        $id_offer=\Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+            "SELECT id_offer FROM "._DB_PREFIX_."dealt_offer WHERE dealt_id_offer='".pSQL($dealtOfferId)."'"
+        );
+        if($id_offer){
+            return new DealtOffer($id_offer);
+        }
+        return null;
+    }
+    public static function findOneByProduct($dealtProductId)
+    {
+        $id_offer=\Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+            "SELECT id_offer FROM "._DB_PREFIX_."dealt_offer WHERE id_dealt_product=".(int)$dealtProductId
+        );
+        if($id_offer){
+            return new DealtOffer($id_offer);
+        }
+        return null;
+    }
     public function add($autodate = true, $null_values = false)
     {
         $this->date_add = date('Y-m-d H:i:s');

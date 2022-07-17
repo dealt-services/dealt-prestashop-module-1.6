@@ -18,11 +18,14 @@ if (!defined('_DEALT_MODULE_MODELS_DIR_')) {
     /** @var string Path to module builders directory */
     define('_DEALT_MODULE_MODELS_DIR_', _DEALT_MODULE_DIR_.'models/');
 }
+if (!defined('_DEALT_MODULE_API_DIR_')) {
+    /** @var string Path to module api directory */
+    define('_DEALT_MODULE_API_DIR_', _DEALT_MODULE_DIR_.'api/');
+}
 if (!defined('_DEALT_MODULE_BUILDERS_DIR_')) {
     /** @var string Path to module builders directory */
     define('_DEALT_MODULE_BUILDERS_DIR_', _DEALT_MODULE_DIR_.'builders/');
 }
-
 if (!defined('_DEALT_MODULE_CONTROLLERS_DIR_')) {
     /** @var string Path to module controllers directory */
     define('_DEALT_MODULE_CONTROLLERS_DIR_', _DEALT_MODULE_DIR_.'controllers/');

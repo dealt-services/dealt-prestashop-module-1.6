@@ -34,7 +34,7 @@ class AdminDealtModuleDealsController extends ModuleAdminController
         $this->addJS(_PS_BO_ALL_THEMES_DIR_.'default/js/tree.js');
         parent::setMedia($isNewTheme);
 
-        $this->addJS(_DEALT_MODULE_JS_URI_.'dealt.js');
+        $this->addJS(_DEALT_MODULE_JS_URI_.'dealtmodule.js');
     }
     /**
      * Object creation

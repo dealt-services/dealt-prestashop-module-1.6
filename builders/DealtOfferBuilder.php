@@ -56,7 +56,7 @@ class DealtOfferBuilder extends AbstractBuilder
 
         //price
         $product->price = (float)$data['product_price'];
-
+        $product->id_tax_rules_group=0;
         //shop association
         $shop_is_feature_active = Shop::isFeatureActive();
         if (!$shop_is_feature_active) {

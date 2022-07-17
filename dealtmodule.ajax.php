@@ -18,4 +18,12 @@ switch ($action) {
     case 'update_dealt_block':
         $module_instance->ajaxUpdateDealtBlock();
         break;
+
+    case 'check_offer_availability':
+        $module_instance->ajaxCheckAvailability();
+        break;
+
+    case 'add_to_cart':
+        $module_instance->ajaxAddToCart();
+        break;
 }

@@ -139,6 +139,7 @@ class Dealtmodule extends Module
 
         return true;
     }
+
     /**
      * Module hook used to load CSS and JS files
      */
@@ -146,8 +147,8 @@ class Dealtmodule extends Module
     {
         if (method_exists($this->context->controller, 'registerJavascript')) {
             $this->context->controller->registerJavascript(
-                'modules-'.$this->name.'-dealtmodule',
-                'modules/'.$this->name.'/views/js/dealtmodule.js',
+                'modules-' . $this->name . '-dealtmodule',
+                'modules/' . $this->name . '/views/js/dealtmodule.js',
                 ['position' => 'bottom', 'priority' => 150]
             );
         } else {
@@ -155,12 +156,17 @@ class Dealtmodule extends Module
                 $this->getPathUri() . 'views/js/dealtmodule.js?version=' . $this->version,
                 false
             );
+
+            $this->context->controller->addJS(
+                $this->getPathUri() . 'views/js/front/utils/zipcode.autocomplete.js?version=' . $this->version,
+                false
+            );
         }
 
         if (method_exists($this->context->controller, 'registerStylesheet')) {
             $this->context->controller->registerStylesheet(
-                'modules-'.$this->name.'-dealtmodule',
-                'modules/'.$this->name.'/views/css/dealtmodule.css',
+                'modules-' . $this->name . '-dealtmodule',
+                'modules/' . $this->name . '/views/css/dealtmodule.css',
                 ['media' => 'all', 'priority' => 150]
             );
         } else {
@@ -173,9 +179,9 @@ class Dealtmodule extends Module
         }
 
 
-
         return $this->displayScriptVariables();
     }
+
     /**
      * Displays additional needed script variables
      *
@@ -187,16 +193,18 @@ class Dealtmodule extends Module
     {
         $this->context->smarty->assign([
             'dealt_module_ajax_uri' => _DEALT_MODULE_AJAX_URI_,
-            'dealt_module_ajax_token' => sha1(_COOKIE_KEY_.$this->name),
-            'dealt_module_customer' => (int) $this->context->customer->id,
-            'dealt_module_currency' => (int) $this->context->currency->id,
-            'dealt_module_shop' => (int) $this->context->shop->id,
-            'dealt_module_lang' => (int) $this->context->language->id,
-            'dealt_module_cart' => (int) $this->context->cart->id,
+            'dealt_module_js_uri' => _DEALT_MODULE_JS_URI_,
+            'dealt_module_ajax_token' => sha1(_COOKIE_KEY_ . $this->name),
+            'dealt_module_customer' => (int)$this->context->customer->id,
+            'dealt_module_currency' => (int)$this->context->currency->id,
+            'dealt_module_shop' => (int)$this->context->shop->id,
+            'dealt_module_lang' => (int)$this->context->language->id,
+            'dealt_module_cart' => (int)$this->context->cart->id,
         ]);
 
-        return $this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_.'front/ScriptVariables.tpl');
+        return $this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_ . 'front/ScriptVariables.tpl');
     }
+
     /**
      * Main module function to display content
      */
@@ -219,37 +227,56 @@ class Dealtmodule extends Module
         require_once(_DEALT_MODULE_MODELS_DIR_ . 'DealtMission.php');
         require_once(_DEALT_MODULE_MODELS_DIR_ . 'DealtCartProductRef.php');
         require_once(_DEALT_MODULE_CLASSES_DIR_ . 'DealtTools.php');
+        require_once(_DEALT_MODULE_CLASSES_DIR_ . 'DealtCart.php');
+        require_once(_DEALT_MODULE_CLASSES_DIR_ . 'DealtCheckoutValidation.php');
         require_once(_DEALT_MODULE_CLASSES_DIR_ . 'DealtPresenter.php');
         require_once(_DEALT_MODULE_BUILDERS_DIR_ . 'BuilderFactory.php');
         require_once(_DEALT_MODULE_BUILDERS_DIR_ . 'DealtOfferBuilder.php');
         require_once(_DEALT_MODULE_BUILDERS_DIR_ . 'AbstractBuilder.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtGenericClient.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtEnv.php');
+    }
+    /** @var DealtGenericClient $client */
+    protected static $client;
+    /**
+     * Get Dealt Client with write access
+     *
+     * @return DealtGenericClient|null
+     */
+    public static function getClient()
+    {
+        if (!isset(static::$client)) {
+            try {
+                $client = new DealtGenericClient();
+                static::$client = $client;
+            } catch (Exception $e) {
+                DealtModuleLogger::log(
+                    'Could not install module',
+                    DealtModuleLogger::TYPE_ERROR,
+                    ['Errors' => $e->getMessage()]
+                );
+            }
+        }
+        return static::$client;
     }
 
     public function hookDisplayBackOfficeHeader($params)
     {
-        if(Tools::getValue('controller')==='AdminDealtModuleDeals'){
+        if (Tools::getValue('controller') === 'AdminDealtModuleDeals') {
             $this->context->controller->addJquery();
         }
-        $this->context->controller->addCSS(_DEALT_MODULE_CSS_URI_.'menuTabIcon.css');
+        $this->context->controller->addCSS(_DEALT_MODULE_CSS_URI_ . 'menuTabIcon.css');
 
     }
+
     public function hookActionAdminDealtModuleDealsFormModifier($params)
     {
-        $id_offer=$params['fields_value']['id_offer'];
-        $dealt=new DealtOffer($id_offer);
-        if(Validate::isLoadedObject($dealt)){
-            $params['fields_value']['product_price']=Product::getPriceStatic($dealt->id_dealt_product, false);
+        $id_offer = $params['fields_value']['id_offer'];
+        $dealt = new DealtOffer($id_offer);
+        if (Validate::isLoadedObject($dealt)) {
+            $params['fields_value']['product_price'] = Product::getPriceStatic($dealt->id_dealt_product, false);
         }
     }
-    /**
-     * @param $model
-     * @return mixed
-     */
-    public function getBuilder($model){
-        $factory=new BuilderFactory($model);
-        return $factory->getBuilderInstance();
-    }
-
     /**
      * hookDisplayRightColumnProduct
      *
@@ -258,23 +285,78 @@ class Dealtmodule extends Module
      **/
     public function hookDisplayRightColumnProduct($params)
     {
-     return $this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_.'hook/DealtContainer.tpl');
+        return $this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_ . 'hook/DealtContainer.tpl');
     }
+    public function HookActionCartSave($params){
+        if(!empty($params['cart']->id)){
+            $dealtCart= new DealtCart();
+            $dealtCart->sanitizeDealtCart($params['cart']->id);
+        }
+
+    }
+    public function HookActionCarrierProcess($params){
+        $dealtCheckoutValidation= new DealtCheckoutValidation($params['cart']);
+
+        if(!$dealtCheckoutValidation->isValid()){
+            $this->context->cookie->__set('redirect_errors', Tools::displayError($this->l('Dealt Service is not available please try again')));
+            Tools::redirect('index.php?controller=order');
+        }
+    }
+    /**
+     * @param $model
+     * @return mixed
+     */
+    public function getBuilder($model)
+    {
+        $factory = new BuilderFactory($model);
+        return $factory->getBuilderInstance();
+    }
+
+
 
     /**
      * display dealt bloc
      */
-    public function ajaxUpdateDealtBlock(){
-        $productId = (int) Tools::getValue('id_product');
-        $productAttributeId = (int) Tools::getValue('id_product_attribute');
-        $id_lang=(int) Tools::getValue('id_lang');
-        $id_cart=Tools::getValue('id_cart');
-        $id_currency=Tools::getValue('id_currency');
-        $cart= new Cart($id_cart);
-        $data=DealtPresenter::present($cart, $productId, $productAttributeId, $id_lang, $id_currency);
+    public function ajaxUpdateDealtBlock()
+    {
+        $productId = (int)Tools::getValue('id_product');
+        $productAttributeId = (int)Tools::getValue('id_product_attribute');
+        $id_lang = (int)Tools::getValue('id_lang');
+        $id_cart = Tools::getValue('id_cart');
+        $id_currency = Tools::getValue('id_currency');
+        $cart = new Cart($id_cart);
+        $data = DealtPresenter::present($cart, $productId, $productAttributeId, $id_lang, $id_currency);
 
         $this->context->smarty->assign($data);
-        die($this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_.'hook/DisplayRightColumnProduct.tpl'));
+        die($this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_ . 'hook/DisplayRightColumnProduct.tpl'));
+    }
+
+    public function ajaxCheckAvailability(){
+        $id_offer=Tools::getValue('id_offer');
+        $zip_code=Tools::getValue('zip_code');
+        $client=self::getClient();
+        $result=$client->checkAvailability($id_offer, $zip_code);
+        die(json_encode($result));
+    }
+    public function ajaxAddToCart(){
+        $dealCart= new DealtCart();
+
+        $dealCart->addDealtOfferToCart(Tools::getValue('id_offer'), Tools::getValue('id_product'), Tools::getValue('id_product_attribute'));
+
+        die();
+    }
+    /**
+     * Transfers error messages to AJAX
+     *
+     * @param array $errors Error messages
+     */
+    public function returnResultToAjax($errors = [])
+    {
+        $result = [
+            'errors' => $errors
+        ];
+
+        die(json_encode($result));
     }
     public function hookActionPaymentConfirmation()
     {

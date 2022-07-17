@@ -34,6 +34,7 @@ class DealtPresenter
                 'title' => $offer->title_offer[$id_lang],
                 'description' => $offer->getDealtProduct()->description_short,
                 'dealtOfferId' => $offer->id,
+                'dealtOfferUUIDV4' => $offer->dealt_id_offer,
                 'price' => DealtTools::getFormattedPrice($offer, $id_currency, $quantity),
                 'unitPriceFormatted' => DealtTools::getFormattedPrice($offer, $id_currency),
                 'unitPrice' => DealtTools::getPrice($productId, $productAttributeId),

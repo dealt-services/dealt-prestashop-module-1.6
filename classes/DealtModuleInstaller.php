@@ -381,6 +381,7 @@ class DealtModuleInstaller
             $module->registerHook('displayRightColumnProduct') &&
             $module->registerHook('actionCartSave') &&
             $module->registerHook('actionAdminDealtModuleDealsFormModifier') &&
+            $module->registerHook('actionCarrierProcess') &&
             $module->registerHook('actionPaymentConfirmation');
     }
 
