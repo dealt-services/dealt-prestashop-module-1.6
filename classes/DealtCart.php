@@ -57,6 +57,7 @@ class DealtCart
             \Context::getContext()->cart = $cart;
             CartRule::autoAddToCart(\Context::getContext());
         }
+        $cart = \Context::getContext()->cart;
         $cart->id_currency = (int)(\Context::getContext()->cookie->id_currency ?? ConfigurationCore::get('PS_CURRENCY_DEFAULT'));
         $cartProduct = DealtTools::getProductFromCart($cart, $productId, $productAttributeId);
 
@@ -95,6 +96,7 @@ class DealtCart
         );
         \Context::getContext()->cart = $cart;
         \Context::getContext()->cookie->__set('id_cart', (int)$cart->id);
+        $cartProduct = DealtTools::getProductFromCart($cart, $productId, $productAttributeId);
 
         return $cart->updateQty(
             (isset($cartProduct['quantity']) &&  $cartProduct['quantity'] > 1) ? $cartProduct['quantity'] : 1,

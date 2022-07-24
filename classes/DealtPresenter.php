@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 class DealtPresenter
 {
+    const imageType='jpg';
     /**
      * Present dealt offer data for a product
      * id / attribute_id pair
@@ -28,6 +29,8 @@ class DealtPresenter
         $cartProduct = DealtTools::getProductFromCart($cart, $productId, $productAttributeId);
 
         $quantity = Tools::getValue('qty', (isset($cartProduct['quantity']) ? $cartProduct['quantity'] : null));
+        $cover=\Product::getCover((int)$offer->id_dealt_product);
+        $image_url = Context::getContext()->link->getImageLink((int)$offer->id_dealt_product, $cover['id_image'], 'medium_default');
 
         return [
             'offer' => array_merge([
@@ -38,7 +41,7 @@ class DealtPresenter
                 'price' => DealtTools::getFormattedPrice($offer, $id_currency, $quantity),
                 'unitPriceFormatted' => DealtTools::getFormattedPrice($offer, $id_currency),
                 'unitPrice' => DealtTools::getPrice($productId, $productAttributeId),
-                'image' => _PS_BASE_URL_.'/modules/dealtmodule/views/img/default.png',
+                'image' => $image_url ?? _PS_BASE_URL_.'/modules/dealtmodule/views/img/default.png',
                 'product' => $offer->getDealtProduct(),
             ], []),
             'binding' => [

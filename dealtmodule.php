@@ -234,20 +234,21 @@ class Dealtmodule extends Module
         require_once(_DEALT_MODULE_BUILDERS_DIR_ . 'DealtOfferBuilder.php');
         require_once(_DEALT_MODULE_BUILDERS_DIR_ . 'AbstractBuilder.php');
         require_once(_DEALT_MODULE_API_DIR_ . 'DealtGenericClient.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiHandler.php');
         require_once(_DEALT_MODULE_API_DIR_ . 'DealtEnv.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtAPIAction.php');
     }
-    /** @var DealtGenericClient $client */
+    /** @var DealtApiHandler $client */
     protected static $client;
+
     /**
-     * Get Dealt Client with write access
-     *
-     * @return DealtGenericClient|null
+     * @return DealtApiHandler
      */
     public static function getClient()
     {
         if (!isset(static::$client)) {
             try {
-                $client = new DealtGenericClient();
+                $client = new DealtApiHandler();
                 static::$client = $client;
             } catch (Exception $e) {
                 DealtModuleLogger::log(
@@ -334,13 +335,11 @@ class Dealtmodule extends Module
     public function ajaxCheckAvailability(){
         $id_offer=Tools::getValue('id_offer');
         $zip_code=Tools::getValue('zip_code');
-        $client=self::getClient();
-        $result=$client->checkAvailability($id_offer, $zip_code);
+        $result=self::getClient()->checkAvailability($id_offer, $zip_code);
         die(json_encode($result));
     }
     public function ajaxAddToCart(){
         $dealCart= new DealtCart();
-
         $dealCart->addDealtOfferToCart(Tools::getValue('id_offer'), Tools::getValue('id_product'), Tools::getValue('id_product_attribute'));
 
         die();
@@ -358,8 +357,9 @@ class Dealtmodule extends Module
 
         die(json_encode($result));
     }
-    public function hookActionPaymentConfirmation()
+    public function hookActionPaymentConfirmation($params)
     {
-        /* Place your code here. */
+        $orderId = intval($params['id_order']);
+        self::getClient()->handleOrderPayment($orderId);
     }
 }

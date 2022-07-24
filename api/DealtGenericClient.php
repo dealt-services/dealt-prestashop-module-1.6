@@ -9,13 +9,13 @@ use Dealt\DealtSDK\GraphQL\Types\Object\Mission;
 use Dealt\DealtSDK\GraphQL\Types\Object\OfferAvailabilityQuerySuccess;
 
 
-class DealtGenericClient
+Abstract class DealtGenericClient
 {
     /**
      * @var DealtEnv
      */
-    private $env;
-    private $module;
+    protected $env;
+    protected $module;
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class DealtGenericClient
      *
      * @return DealtClient
      */
-    public function getClient()
+    protected function getClient()
     {
         if ($this->client instanceof DealtClient) {
             return $this->client;
@@ -41,82 +41,6 @@ class DealtGenericClient
             'api_key' => $this->env->getDealtApiKey(),
             'env' => $this->env->getName() === 'prod' ? DealtEnvironment::PRODUCTION : DealtEnvironment::TEST,
         ]);
-    }
-
-    /**
-     * Checks the availability of a Dealt offer
-     *
-     * @param string $offer_id
-     * @param string $zip_code
-     * @param string $country
-     *
-     * @return array
-     */
-    public function checkAvailability($offer_id, $zip_code, $country = 'France')
-    {
-        try {
-            $offer = $this->getClient()->offers->availability([
-                'offer_id' => $offer_id,
-                'address' => [
-                    'country' => $country,
-                    'zip_code' => $zip_code,
-                ],
-            ]);
-
-            if ($offer !== null) {
-                return $this->handleResponse(
-                    "Offer is available",
-                    'availability',
-
-                    [
-                        'id_offer' => $offer_id,
-                        'zip_code' => $zip_code,
-                        'country' => $country
-                    ],
-
-                    array_merge(
-                        [
-                            'available' => $offer->available,
-                            'net_price' => $offer->net_price,
-                            'gross_price' => $offer->gross_price,
-                            'vat_price' => $offer->vat_price
-                        ],
-                        $offer->available ? [] : ['reason' => $this->module->l('Offer unavailable for the requested zip code')]
-                    )
-
-                );
-            }
-        } catch (GraphQLFailureException $e) {
-            $this->handleException($e);
-        } catch (GraphQLException $e) {
-            $this->handleException($e);
-        } catch (\Exception $e) {
-            $this->handleException($e);
-        } catch (Throwable $e) {
-            $this->handleException($e);
-        }
-        return null;
-    }
-
-
-    /**
-     * @param string $missionId
-     *
-     * @return Mission|null
-     */
-    public function cancelMission($missionId)
-    {
-        try {
-            $result = $this->getClient()->missions->cancel($missionId);
-
-            return $result->mission;
-        } catch (GraphQLFailureException $e) {
-            $this->handleException($e);
-        } catch (GraphQLException $e) {
-            $this->handleException($e);
-        } catch (\Exception $e) {
-            $this->handleException($e);
-        }
     }
 
     protected function handleException(\Exception $exception)

@@ -10,4 +10,10 @@
             {l s='here' mod='dealtmodule'}
         </a>
     </div>
+    <div class="row">
+        {l s='Ecommerce integration guide' mod='dealtmodule'}
+        <a target="_blank" href="https://developer.dealt.fr/e-commerce-integration-guide">
+            {l s='Ecommerce integration guide' mod='dealtmodule'}
+        </a>
+    </div>
 </div>

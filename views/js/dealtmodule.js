@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    displayDealtBlock();
+    if(typeof page_name != 'undefined'){
+        displayDealtBlock();
+    }
 
 });
 

@@ -354,6 +354,16 @@ class DealtModuleInstaller
     private function getUninstallQueries()
     {
         $sql = [];
+        $dealProducts=Db::getInstance()->executeS(
+            "SELECT id_dealt_product FROM `" . _DB_PREFIX_ . "dealt_offer`"
+        );
+        if(!empty($dealProducts)){
+            foreach ($dealProducts as $item){
+                $id_product=$item['id_dealt_product'];
+                $product= new Product($id_product);
+                $product->delete();
+            }
+        }
 
         $sql[] = '
             DROP TABLE IF EXISTS

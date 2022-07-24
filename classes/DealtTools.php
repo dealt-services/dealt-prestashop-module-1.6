@@ -69,7 +69,7 @@ class DealtTools
     public static function getProductFromCart(Cart $cart, $productId, $productAttributeId = null)
     {
         $cartProducts = $cart->getProducts();
-        if(!empty($cartProducts)){
+        if (!empty($cartProducts)) {
             foreach ($cartProducts as $cartProduct) {
                 if (
                     (int)$cartProduct['id_product'] == $productId &&
@@ -336,6 +336,19 @@ class DealtTools
             DealtModuleLogger::log('Something went wrong when in offer search from cart', DealtModuleLogger::TYPE_ERROR, ['Error' => $e]);
         }
         return [];
+    }
+
+    /**
+     * @param $cartId
+     * @param $offer
+     * @return PrestaShopCollection
+     */
+    public static function getDealtCartRef($cartId, $offer)
+    {
+        $dealtCartRefs = new PrestaShopCollection('DealtCartProductRef');
+        $dealtCartRefs->where('id_cart', '=', (int)$cartId);
+        $dealtCartRefs->where('id_offer', '=', (int)$offer->id);
+        return $dealtCartRefs->getFirst();
     }
 
 }

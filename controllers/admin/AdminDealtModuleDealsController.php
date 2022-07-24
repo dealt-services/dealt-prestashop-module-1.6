@@ -25,17 +25,19 @@ class AdminDealtModuleDealsController extends ModuleAdminController
         $this->initList();
         $this->builder = $this->module->getBuilder('DealtOffer');
     }
+
     /**
      * Loads CSS and JS files
      */
     public function setMedia($isNewTheme = false)
     {
         $this->addJquery();
-        $this->addJS(_PS_BO_ALL_THEMES_DIR_.'default/js/tree.js');
+        $this->addJS(_PS_BO_ALL_THEMES_DIR_ . 'default/js/tree.js');
         parent::setMedia($isNewTheme);
 
-        $this->addJS(_DEALT_MODULE_JS_URI_.'dealtmodule.js');
+        $this->addJS(_DEALT_MODULE_JS_URI_ . 'dealtmodule.js');
     }
+
     /**
      * Object creation
      *
@@ -46,15 +48,16 @@ class AdminDealtModuleDealsController extends ModuleAdminController
         if (Tools::isSubmit('submitAdddealt_offer')) {
             $this->validateFields();
         }
-        if(!empty($this->errors)){
+        if (!empty($this->errors)) {
             return;
         }
         $this->builder->createOrUpdate(Tools::getAllValues());
-        if(empty($this->errors)){
+        if (empty($this->errors)) {
             $this->confirmations[] = $this->l('The offer has successfully created');
         }
 
     }
+
 
     /**
      * Object update
@@ -64,11 +67,11 @@ class AdminDealtModuleDealsController extends ModuleAdminController
     public function processUpdate()
     {
         $this->validateFields();
-        if(!empty($this->errors)){
+        if (!empty($this->errors)) {
             return;
         }
         $this->builder->createOrUpdate(Tools::getAllValues());
-        if(empty($this->errors)){
+        if (empty($this->errors)) {
             $this->confirmations[] = $this->l('The offer has successfully updated');
         }
     }
@@ -120,7 +123,8 @@ class AdminDealtModuleDealsController extends ModuleAdminController
                 ON (dol.`id_offer` = a.`id_offer`
                     AND dol.`id_lang` = "' . (int)$this->context->language->id . '"
                     AND dol.`id_shop` = "' . (int)$this->context->shop->id . '")
-            '.Shop::addSqlAssociation('dealt_offer', 'a').'               
+            JOIN ps_dealt_offer_shop dealt_offer_shop
+		ON (dealt_offer_shop.id_offer = a.id_offer AND dealt_offer_shop.id_shop = "' . (int)$this->context->shop->id . '")                
             LEFT JOIN `' . _DB_PREFIX_ . 'dealt_offer_category` doc
                 ON (doc.`id_offer` = a.`id_offer`)        
         ';
@@ -128,28 +132,23 @@ class AdminDealtModuleDealsController extends ModuleAdminController
         $this->_defaultOrderWay = 'DESC';
         $this->_group .= 'GROUP BY a.id_offer';
         $this->actions = ['edit', 'delete'];
-        $this->bulk_actions = [
-            'delete' => [
-                'text' => $this->l('Delete selected'),
-                'confirm' => $this->l('Delete selected deals?'),
-                'icon' => 'icon-trash'
-            ]
-        ];
+
     }
 
     public function getProductLink($id)
     {
         if (!empty($id) && (int)$id) {
-            $product= new \Product($id);
-            return '<a href="' . $this->context->link->getAdminLink('AdminProducts') . '&id_product=' . (int)$id . '&updateproduct">'.$product->name[$this->context->language->id] ?? $id.'</a>';
+            $product = new \Product($id);
+            return '<a href="' . $this->context->link->getAdminLink('AdminProducts') . '&id_product=' . (int)$id . '&updateproduct">' . $product->name[$this->context->language->id] ?? $id . '</a>';
         } else {
             return 0;
         }
     }
+
     public function getOfferName($id)
     {
         if (!empty($id) && (int)$id) {
-            $offer= new \DealtOffer($id);
+            $offer = new \DealtOffer($id);
             return $offer->title_offer[$this->context->language->id];
         } else {
             return '';
@@ -158,6 +157,9 @@ class AdminDealtModuleDealsController extends ModuleAdminController
 
     private function initForm()
     {
+        if (!($obj = $this->loadObject(true))) {
+            return;
+        }
         $root = Category::getRootCategory();
         $tree = new HelperTreeCategories('offer_category_tree');
 
@@ -167,7 +169,13 @@ class AdminDealtModuleDealsController extends ModuleAdminController
             ->setFullTree(true)
             ->setSelectedCategories(DealtOfferCategory::getOfferCategories(Tools::getValue('id_offer')))
             ->setInputName('offer_category_tree'); //Set the name of input. The option "name" of $fields_form doesn't seem to work with "categories_select" type
-        $selected_categories=DealtOfferCategory::getOfferCategories(Tools::getValue('id_offer'));
+        $selected_categories = DealtOfferCategory::getOfferCategories(Tools::getValue('id_offer'));
+        $cover=\Product::getCover((int)$obj->id_dealt_product);
+        $path_to_image = _PS_IMG_DIR_.'p/'.\Image::getImgFolderStatic($cover['id_image']).(int)$cover['id_image'].'.jpg';
+        $image_url = \ImageManager::thumbnail($path_to_image, 'product_'.(int)$obj->id_dealt_product.'.'.$this->imageType, 350,
+            $this->imageType, true, true);
+
+        $image_size = file_exists($path_to_image) ? filesize($path_to_image) / 1000 : false;
         Tools::getValue('id_offer');
         $this->fields_form = [
             'legend' => [
@@ -202,14 +210,23 @@ class AdminDealtModuleDealsController extends ModuleAdminController
                     'required' => true
                 ],
                 [
+                    'type' => 'file',
+                    'label' => $this->l('Product Cover Image'),
+                    'name' => 'image',
+                    'display_image' => true,
+                    'image' => $image_url ? $image_url : false,
+                    'size' => $image_size,
+                    'hint' => $this->l('This is the main image for the dealt offer.'),
+                ],
+                [
                     'type' => 'categories',
                     'label' => $this->l('Display in category'),
                     'multiple' => true,
                     'name' => 'offer_category_tree',
-                    'tree'  => array(
+                    'tree' => array(
                         'id' => 'id',
-                        'use_checkbox'  => true,
-                        'use_search'  => true,
+                        'use_checkbox' => true,
+                        'use_search' => true,
                         'selected_categories' => $selected_categories,
                         'root_category' => $root->id,
                     )
@@ -220,7 +237,6 @@ class AdminDealtModuleDealsController extends ModuleAdminController
             ]
         ];
     }
-
 
     private function validateFields()
     {
