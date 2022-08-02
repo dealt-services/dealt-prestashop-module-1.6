@@ -7,7 +7,7 @@ use Dealt\DealtSDK\Exceptions\GraphQLFailureException;
 use Dealt\DealtSDK\GraphQL\Types\Object\Mission;
 use Dealt\DealtSDK\GraphQL\Types\Object\OfferAvailabilityQuerySuccess;
 
-require_once(_DEALT_MODULE_API_DIR_ . 'DealtAPIAction.php');
+require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiAction.php');
 
 class DealtApiHandler extends DealtGenericClient
 {
@@ -27,7 +27,7 @@ class DealtApiHandler extends DealtGenericClient
                 'offer_id' => $offer_id,
                 'address' => [
                     'country' => $country,
-                    'zip_code' => $zip_code,
+                    'zip_code' => substr($zip_code, 0, 5),
                 ],
             ]);
 
@@ -223,7 +223,7 @@ class DealtApiHandler extends DealtGenericClient
                 'webHookUrl' => Context::getContext()->link->getModuleLink(
                     strtolower(DealtModule::class),
                     'api',
-                    ['ajax' => true, 'action' => DealtAPIAction::$MISSION_WEBHOOK, 'token'=>sha1(_COOKIE_KEY_ . $this->module->name)]
+                    ['ajax' => true, 'action' => DealtApiAction::$MISSION_WEBHOOK, 'token'=>sha1(_COOKIE_KEY_ . $this->module->name)]
                 ),
                 'extraDetails' => (new Link())->getProductLink($product),
             ]);

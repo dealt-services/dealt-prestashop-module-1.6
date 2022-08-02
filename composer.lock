@@ -4,29 +4,29 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55b248d8068072b1afe194cf32abe321",
+    "content-hash": "049e77cc827c2d444240cb6d7eb685fb",
     "packages": [
         {
             "name": "dealt/dealt-sdk",
-            "version": "v0.0.6",
+            "version": "v0.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dealt-services/dealt-php-sdk.git",
-                "reference": "c8beeb918e31cab9d415d7ec9d2d3555417b52d9"
+                "reference": "e9ea1b82d73c0a242551152b30f6e5e1ff07698c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dealt-services/dealt-php-sdk/zipball/c8beeb918e31cab9d415d7ec9d2d3555417b52d9",
-                "reference": "c8beeb918e31cab9d415d7ec9d2d3555417b52d9",
+                "url": "https://api.github.com/repos/dealt-services/dealt-php-sdk/zipball/e9ea1b82d73c0a242551152b30f6e5e1ff07698c",
+                "reference": "e9ea1b82d73c0a242551152b30f6e5e1ff07698c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1 || ^8.0",
-                "symfony/polyfill-php80": "^1.26"
+                "php": ">=7.0 || ^8.0",
+                "symfony70/polyfill-php80": "^1.25.4"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2.1",
-                "phpstan/phpstan": "^1.1.1",
+                "friendsofphp/php-cs-fixer": "^2",
+                "phpstan/phpstan": "*",
                 "phpunit/phpunit": "*"
             },
             "type": "library",
@@ -53,31 +53,34 @@
             ],
             "support": {
                 "issues": "https://github.com/dealt-services/dealt-php-sdk/issues",
-                "source": "https://github.com/dealt-services/dealt-php-sdk/tree/v0.0.6"
+                "source": "https://github.com/dealt-services/dealt-php-sdk/tree/v0.0.7"
             },
-            "time": "2022-06-16T19:34:39+00:00"
+            "time": "2022-07-29T10:17:28+00:00"
         },
         {
-            "name": "symfony/polyfill-php80",
-            "version": "v1.26.0",
+            "name": "symfony70/polyfill-php80",
+            "version": "1.25.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/polyfill-php80.git",
-                "reference": "cfa0ae98841b9e461207c13ab093d76b0fa7bace"
+                "url": "https://github.com/symfony70/polyfill-php80.git",
+                "reference": "b8ca4700156c6c2663ef30fbcc545fa5cdf49333"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php80/zipball/cfa0ae98841b9e461207c13ab093d76b0fa7bace",
-                "reference": "cfa0ae98841b9e461207c13ab093d76b0fa7bace",
+                "url": "https://api.github.com/repos/symfony70/polyfill-php80/zipball/b8ca4700156c6c2663ef30fbcc545fa5cdf49333",
+                "reference": "b8ca4700156c6c2663ef30fbcc545fa5cdf49333",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.0"
+            },
+            "replace": {
+                "symfony/polyfill-php80": "*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.23-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -109,11 +112,19 @@
                     "email": "p@tchwork.com"
                 },
                 {
+                    "name": "Gary Gitton",
+                    "email": "github-support@swarmtech.fr"
+                },
+                {
                     "name": "Symfony Community",
                     "homepage": "https://symfony.com/contributors"
+                },
+                {
+                    "name": "SwarmTech Community",
+                    "homepage": "https://swarmtech.fr"
                 }
             ],
-            "description": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+            "description": "PHP 7.0 version of Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
             "homepage": "https://symfony.com",
             "keywords": [
                 "compatibility",
@@ -122,23 +133,9 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php80/tree/v1.26.0"
+                "source": "https://github.com/symfony70/polyfill-php80/tree/1.25.4"
             },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-05-10T07:21:04+00:00"
+            "time": "2022-03-28T09:53:42+00:00"
         }
     ],
     "packages-dev": [],
@@ -149,5 +146,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
