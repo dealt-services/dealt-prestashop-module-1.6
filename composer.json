@@ -1,5 +1,5 @@
 {
     "require": {
-        "dealt/dealt-sdk": "^0.0.6"
+        "dealt/dealt-sdk": "^0.0.7"
     }
 }

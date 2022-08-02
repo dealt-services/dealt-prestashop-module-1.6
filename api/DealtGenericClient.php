@@ -39,11 +39,11 @@ Abstract class DealtGenericClient
 
         return new DealtClient([
             'api_key' => $this->env->getDealtApiKey(),
-            'env' => $this->env->getName() === 'prod' ? DealtEnvironment::PRODUCTION : DealtEnvironment::TEST,
+            'env' => $this->env->getName() === 'prod' ? DealtEnvironment::$PRODUCTION : DealtEnvironment::$TEST,
         ]);
     }
 
-    protected function handleException(\Exception $exception)
+    protected function handleException($exception)
     {
         $body = '';
         $httpCode = 500;
