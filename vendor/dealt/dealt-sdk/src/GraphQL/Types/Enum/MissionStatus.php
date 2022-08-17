@@ -4,9 +4,14 @@ namespace Dealt\DealtSDK\GraphQL\Types\Enum;
 
 class MissionStatus
 {
-    public const DRAFT            = 'DRAFT';
-    public const SUBMITTED        = 'SUBMITTED';
-    public const CANCELLED        = 'CANCELLED';
-    public const ACCEPTED         = 'ACCEPTED';
-    public const DONE             = 'DONE';
+    /** @var string */
+    public static $DRAFT            = 'DRAFT';
+    /** @var string */
+    public static $SUBMITTED        = 'SUBMITTED';
+    /** @var string */
+    public static $CANCELLED        = 'CANCELLED';
+    /** @var string */
+    public static $ACCEPTED         = 'ACCEPTED';
+    /** @var string */
+    public static $DONE             = 'DONE';
 }

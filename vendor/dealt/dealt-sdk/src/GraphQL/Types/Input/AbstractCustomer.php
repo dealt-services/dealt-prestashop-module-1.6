@@ -9,5 +9,7 @@ abstract class AbstractCustomer extends AbstractInputType
         'lastName'              => 'String!',
         'emailAddress'          => 'EmailAddress!',
         'phoneNumber'           => 'PhoneNumber!',
+        'customerProductPrice'  => 'Float',
+        'customerServicePrice'  => 'Float',
     ];
 }

@@ -13,19 +13,20 @@ final class EndToEndTest extends TestCase
     {
         $this->client = new DealtClient([
             'api_key' => getenv('DEALT_TEST_API_KEY'),
-            'env'     => DealtEnvironment::TEST,
+            'env'     => DealtEnvironment::$TEST,
         ]);
 
         parent::__construct();
     }
 
-    public function testChecksOfferAvailability(): void
+    public function testChecksOfferAvailability()
     {
         $result = $this->client->offers->availability([
             'offer_id' => getenv('DEALT_TEST_OFFER_ID'),
             'address'  => [
                 'country'  => 'France',
                 'zip_code' => '92190',
+                'street1'  => 'Test'
             ],
         ]);
 
@@ -39,6 +40,7 @@ final class EndToEndTest extends TestCase
             'address'  => [
                 'country'  => 'France',
                 'zip_code' => '92190',
+                'street1'  => 'Test'
             ],
             'customer' => [
                 'first_name'    => 'Jean',
@@ -63,7 +65,7 @@ final class EndToEndTest extends TestCase
         $result = $this->client->missions->get($missionId);
 
         $this->assertEquals($missionId, $result->mission->id);
-        $this->assertEquals(MissionStatus::SUBMITTED, $result->mission->status);
+        $this->assertEquals(MissionStatus::$SUBMITTED, $result->mission->status);
         $this->assertEquals(getenv('DEALT_TEST_OFFER_ID'), $result->mission->offer->id);
 
         return $missionId;
@@ -90,11 +92,11 @@ final class EndToEndTest extends TestCase
      * @param string $missionId
      * @depends testGetMissionByIdSuccessfully
      */
-    public function testCancelsMissionSuccessfully($missionId): void
+    public function testCancelsMissionSuccessfully($missionId)
     {
         $result = $this->client->missions->cancel($missionId);
 
         $this->assertEquals($missionId, $result->mission->id);
-        $this->assertEquals(MissionStatus::CANCELLED, $result->mission->status);
+        $this->assertEquals(MissionStatus::$CANCELLED, $result->mission->status);
     }
 }

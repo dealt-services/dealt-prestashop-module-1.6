@@ -9,15 +9,15 @@ use PHPUnit\Framework\TestCase;
 
 final class DealtClientTest extends TestCase
 {
-    public function testInitializesCorrectly(): void
+    public function testInitializesCorrectly()
     {
         $this->assertInstanceOf(
             DealtClient::class,
-            new DealtClient(['api_key' => 'xxx', 'env' => DealtEnvironment::PRODUCTION])
+            new DealtClient(['api_key' => 'xxx', 'env' => DealtEnvironment::$PRODUCTION])
         );
     }
 
-    public function testInitializesCorrectlyWhenMissingEnv(): void
+    public function testInitializesCorrectlyWhenMissingEnv()
     {
         $this->assertInstanceOf(
             DealtClient::class,
@@ -25,25 +25,25 @@ final class DealtClientTest extends TestCase
         );
     }
 
-    public function testThrowsWhenMissingApiKey(): void
+    public function testThrowsWhenMissingApiKey()
     {
         $this->expectException(InvalidArgumentException::class);
-        new DealtClient(['env' => DealtEnvironment::TEST]);
+        new DealtClient(['env' => DealtEnvironment::$TEST]);
     }
 
-    public function testThrowsWhenGivenWrongApiKeyType(): void
+    public function testThrowsWhenGivenWrongApiKeyType()
     {
         $this->expectException(InvalidArgumentException::class);
         new DealtClient(['api_key' => []]);
     }
 
-    public function testThrowsWhenGivenWrongEnvKeyType(): void
+    public function testThrowsWhenGivenWrongEnvKeyType()
     {
         $this->expectException(InvalidArgumentException::class);
         new DealtClient(['api_key' => '', 'env' => []]);
     }
 
-    public function testResolvesMissionsService(): void
+    public function testResolvesMissionsService()
     {
         $client = new DealtClient(['api_key' => 'xxx']);
         $this->assertInstanceOf(
@@ -52,7 +52,7 @@ final class DealtClientTest extends TestCase
         );
     }
 
-    public function testResolvesOffersService(): void
+    public function testResolvesOffersService()
     {
         $client = new DealtClient(['api_key' => 'xxx']);
         $this->assertInstanceOf(

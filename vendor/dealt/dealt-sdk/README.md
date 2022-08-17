@@ -6,7 +6,7 @@
 
 ###### Requirements
 
-[PHP 7.1+](https://php.net/releases/) - _library tested on php 7.1, 7.2, 7.3, 7.4 & 8.1_
+[PHP 7+](https://php.net/releases/) - _library tested on php 7.0, 7.1, 7.2, 7.3, 7.4 & 8.1_
 
 ###### Composer
 
@@ -27,7 +27,7 @@ use Dealt\DealtSDK\DealtEnvironment;
 
 $client = new DealtClient([
     "api_key" => "secret_dealt_api_key",
-    "env" => DealtEnvironment::PRODUCTION
+    "env" => DealtEnvironment::$PRODUCTION
 ]);
 ```
 

@@ -31,7 +31,6 @@ class DealtPresenter
         $quantity = Tools::getValue('qty', (isset($cartProduct['quantity']) ? $cartProduct['quantity'] : null));
         $cover=\Product::getCover((int)$offer->id_dealt_product);
         $image_url = Context::getContext()->link->getImageLink((int)$offer->id_dealt_product, $cover['id_image'], 'medium_default');
-
         return [
             'offer' => array_merge([
                 'title' => $offer->title_offer[$id_lang],
@@ -41,7 +40,7 @@ class DealtPresenter
                 'price' => DealtTools::getFormattedPrice($offer, $id_currency, $quantity),
                 'unitPriceFormatted' => DealtTools::getFormattedPrice($offer, $id_currency),
                 'unitPrice' => DealtTools::getPrice($productId, $productAttributeId),
-                'image' => $image_url ?? _PS_BASE_URL_.'/modules/dealtmodule/views/img/default.png',
+                'image' => ($image_url && file_exists($image_url)) ? $image_url : _PS_BASE_URL_.'/modules/dealtmodule/views/img/default.png',
                 'product' => $offer->getDealtProduct(),
             ], []),
             'binding' => [
@@ -74,7 +73,6 @@ class DealtPresenter
             return null;
         }
         $id_offer=DealtOfferCategory::getProductOffer($product);
-
         if(empty($id_offer)){
             return null;
         }

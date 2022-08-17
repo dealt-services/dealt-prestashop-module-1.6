@@ -25,6 +25,9 @@ abstract class AbstractUnionType implements GraphQLObjectInterface
         return join(' ', $unionFragment);
     }
 
+    /**
+     * @param object $json
+     */
     public static function fromJson($json): GraphQLObjectInterface
     {
         $typename   = isset($json->__typename) ? $json->__typename : '';

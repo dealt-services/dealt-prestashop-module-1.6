@@ -4,6 +4,8 @@ namespace Dealt\DealtSDK;
 
 class DealtEnvironment
 {
-    public const PRODUCTION = 'production';
-    public const TEST       = 'test';
+    /** @var string */
+    public static $PRODUCTION = 'production';
+    /** @var string */
+    public static $TEST       = 'test';
 }

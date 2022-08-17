@@ -12,12 +12,6 @@ use Exception;
  */
 class GraphQLClient
 {
-    /** @var array<string, string> available dealt endpoints */
-    private static $ENDPOINTS = [
-        DealtEnvironment::PRODUCTION => 'https://api.dealt.fr/graphql',
-        DealtEnvironment::TEST       => 'https://api.test.dealt.fr/graphql',
-    ];
-
     /** @var string[] */
     private static $HEADERS = ['Content-Type: application/json'];
 
@@ -34,7 +28,10 @@ class GraphQLClient
     public function __construct(string $apiKey, string $env)
     {
         $this->apiKey   = $apiKey;
-        $this->endpoint = self::$ENDPOINTS[$env];
+        $this->endpoint = [
+            DealtEnvironment::$PRODUCTION => 'https://api.dealt.fr/graphql',
+            DealtEnvironment::$TEST       => 'https://api.test.dealt.fr/graphql',
+        ][$env];
     }
 
     /**

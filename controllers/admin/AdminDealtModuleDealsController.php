@@ -123,7 +123,7 @@ class AdminDealtModuleDealsController extends ModuleAdminController
                 ON (dol.`id_offer` = a.`id_offer`
                     AND dol.`id_lang` = "' . (int)$this->context->language->id . '"
                     AND dol.`id_shop` = "' . (int)$this->context->shop->id . '")
-            JOIN ps_dealt_offer_shop dealt_offer_shop
+            JOIN ' . _DB_PREFIX_ . 'dealt_offer_shop dealt_offer_shop
 		ON (dealt_offer_shop.id_offer = a.id_offer AND dealt_offer_shop.id_shop = "' . (int)$this->context->shop->id . '")                
             LEFT JOIN `' . _DB_PREFIX_ . 'dealt_offer_category` doc
                 ON (doc.`id_offer` = a.`id_offer`)        

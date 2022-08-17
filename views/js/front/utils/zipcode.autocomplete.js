@@ -1,9 +1,10 @@
 var zipcodes = (function() {
+  let baseUrl=baseUri.replace("index.php", "");
   var zipcodes = null;
   $.ajax({
     'async': false,
     'global': false,
-    'url': baseUri +'modules/dealtmodule/views/js/data/city-zipcodes.json',
+    'url': baseUrl +'modules/dealtmodule/views/js/data/city-zipcodes.json',
     'dataType': "json",
     'success': function(data) {
       zipcodes = data;

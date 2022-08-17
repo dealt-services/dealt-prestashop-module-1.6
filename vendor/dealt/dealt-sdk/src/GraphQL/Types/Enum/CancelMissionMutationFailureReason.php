@@ -4,7 +4,10 @@ namespace Dealt\DealtSDK\GraphQL\Types\Enum;
 
 class CancelMissionMutationFailureReason
 {
-    public const INVALID_API_KEY        = 'INVALID_API_KEY';
-    public const MISSION_NOT_FOUND      = 'MISSION_NOT_FOUND';
-    public const INVALID_MISSION_STATUS = 'INVALID_MISSION_STATUS';
+    /** @var string */
+    public static $INVALID_API_KEY        = 'INVALID_API_KEY';
+    /** @var string */
+    public static $MISSION_NOT_FOUND      = 'MISSION_NOT_FOUND';
+    /** @var string */
+    public static $INVALID_MISSION_STATUS = 'INVALID_MISSION_STATUS';
 }

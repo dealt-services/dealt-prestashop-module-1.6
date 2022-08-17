@@ -40,7 +40,6 @@ function displayDealtBlock() {
             '&id_currency=' + dealt_module_currency + '&id_shop=' + dealt_module_shop +
             '&id_cart=' + dealt_module_cart + '&id_lang=' + dealt_module_lang,
         success: function (resp) {
-
             $('.js-dealt-block-container').html(resp);
         }
     });

@@ -67,7 +67,8 @@ abstract class AbstractObjectType implements GraphQLObjectInterface
 
                 // enum parsing
                 if (isset($definition['isEnum']) && $definition['isEnum'] === true) {
-                    $class->setProperty($_key, constant("{$subObjectClass}::{$json->$key}"));
+                    $staticKey = $json->$key;
+                    $class->setProperty($_key, $subObjectClass::$$staticKey);
                     continue;
                 }
 

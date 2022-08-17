@@ -4,7 +4,6 @@ namespace Dealt\DealtSDK;
 
 use Dealt\DealtSDK\Services\AbstractDealtService;
 use Dealt\DealtSDK\Services\DealtServiceFactory;
-use Dealt\DealtSDK\Utils\Polyfill80;
 
 class DealtClient extends CoreDealtClient
 {

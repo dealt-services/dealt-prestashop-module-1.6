@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class GraphQLOperationTest extends TestCase
 {
-    public function testMissionQueryFragment(): void
+    public function testMissionQueryFragment()
     {
         $query = <<<'GRAPHQL'
             query mission($apiKey: String!, $missionId: UUID!) {
@@ -39,7 +39,7 @@ GRAPHQL;
         $this->assertEquals(GraphQLFormatter::formatQuery($query), MissionQuery::toQuery());
     }
 
-    public function testMissionsQueryFragment(): void
+    public function testMissionsQueryFragment()
     {
         $query = <<<'GRAPHQL'
             query missions($apiKey: String!) {
@@ -68,7 +68,7 @@ GRAPHQL;
         $this->assertEquals(GraphQLFormatter::formatQuery($query), MissionsQuery::toQuery());
     }
 
-    public function testOfferAvailabilityQueryFragment(): void
+    public function testOfferAvailabilityQueryFragment()
     {
         $query = <<<'GRAPHQL'
             query offerAvailability($apiKey: String!, $offerId: UUID!, $address: OfferAvailabilityQuery_Address!) {
@@ -101,7 +101,7 @@ GRAPHQL;
         $this->assertEquals(GraphQLFormatter::formatQuery($query), OfferAvailabilityQuery::toQuery());
     }
 
-    public function testSubmitMissionMutationFragment(): void
+    public function testSubmitMissionMutationFragment()
     {
         $mutation = <<<'GRAPHQL'
             mutation submitMission($apiKey: String!, $offerId: UUID!, $address: SubmitMissionMutation_Address!, $customer: SubmitMissionMutation_Customer!, $webHookUrl: String, $extraDetails: String) {
@@ -130,7 +130,7 @@ GRAPHQL;
         $this->assertEquals(GraphQLFormatter::formatQuery($mutation), GraphQLFormatter::formatQuery(SubmitMissionMutation::toQuery()));
     }
 
-    public function testCancelMissionMutationFragment(): void
+    public function testCancelMissionMutationFragment()
     {
         $mutation = <<<'GRAPHQL'
             mutation cancelMission($apiKey: String!, $missionId: UUID!) {

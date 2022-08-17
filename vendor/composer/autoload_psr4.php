@@ -6,6 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony70/polyfill-php80'),
     'Dealt\\DealtSDK\\' => array($vendorDir . '/dealt/dealt-sdk/src'),
 );

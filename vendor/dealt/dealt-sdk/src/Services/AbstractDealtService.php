@@ -36,8 +36,10 @@ abstract class AbstractDealtService
      * @param GraphQLOperation     $operation
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
-    public static function validateParameters($params, $operation): void
+    public static function validateParameters($params, $operation)
     {
         $operationName   = $operation::getOperationName();
 
@@ -57,8 +59,10 @@ abstract class AbstractDealtService
      * @param string               $paramPath
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
-    private static function validateInputParameters($params, $inputParameters, $paramPath = ''): void
+    private static function validateInputParameters($params, $inputParameters, $paramPath = '')
     {
         /* Reject unsupported parameters */
         foreach (array_keys($params) as $key) {

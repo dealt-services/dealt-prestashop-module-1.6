@@ -327,9 +327,12 @@ class Dealtmodule extends Module
         $id_currency = Tools::getValue('id_currency');
         $cart = new Cart($id_cart);
         $data = DealtPresenter::present($cart, $productId, $productAttributeId, $id_lang, $id_currency);
+        if(!empty($data)){
+            $this->context->smarty->assign($data);
+            die($this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_ . 'hook/DisplayRightColumnProduct.tpl'));
+        }
+        die();
 
-        $this->context->smarty->assign($data);
-        die($this->context->smarty->fetch(_DEALT_MODULE_TEMPLATES_DIR_ . 'hook/DisplayRightColumnProduct.tpl'));
     }
 
     public function ajaxCheckAvailability(){
