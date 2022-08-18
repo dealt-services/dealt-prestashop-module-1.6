@@ -236,7 +236,7 @@ class Dealtmodule extends Module
         require_once(_DEALT_MODULE_API_DIR_ . 'DealtGenericClient.php');
         require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiHandler.php');
         require_once(_DEALT_MODULE_API_DIR_ . 'DealtEnv.php');
-        require_once(_DEALT_MODULE_API_DIR_ . 'DealtAPIAction.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiAction.php');
     }
     /** @var DealtApiHandler $client */
     protected static $client;

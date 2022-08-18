@@ -17,7 +17,7 @@ class AdminDealtModuleMissionsController extends ModuleAdminController
         $this->bootstrap = true;
 
         parent::__construct();
-        require_once(_DEALT_MODULE_API_DIR_ . 'DealtAPIAction.php');
+        require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiAction.php');
         require_once(_DEALT_MODULE_MODELS_DIR_ . 'DealtMission.php');
 
         $this->initList();
