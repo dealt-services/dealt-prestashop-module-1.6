@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once(_DEALT_MODULE_API_DIR_ . 'DealtAPIAction.php');
+require_once(_DEALT_MODULE_API_DIR_ . 'DealtApiAction.php');
 
 class DealtModuleApiModuleFrontController extends AbstractActionHandlerFrontController
 {
