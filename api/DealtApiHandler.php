@@ -219,6 +219,8 @@ class DealtApiHandler extends DealtGenericClient
                     'last_name' => $customer->lastname,
                     'email_address' => $customer->email,
                     'phone_number' => $phone != false ? $phone : $phoneMobile,
+                    'customerProductPrice' => \Product::getPriceStatic($product->id, false),
+                    'customerServicePrice' => \Product::getPriceStatic($offer->id_dealt_product, false),
                 ],
                 'webHookUrl' => \Context::getContext()->link->getModuleLink(
                     strtolower(DealtModule::class),
@@ -226,8 +228,6 @@ class DealtApiHandler extends DealtGenericClient
                     ['ajax' => true, 'action' => DealtApiAction::$MISSION_WEBHOOK, 'token'=>sha1(_COOKIE_KEY_ . $this->module->name)]
                 ),
                 'extraDetails' => (new Link())->getProductLink($product),
-                'customerProductPrice' => \Product::getPriceStatic($product->id, false),
-                'customerServicePrice' => \Product::getPriceStatic($offer->id_dealt_product, false),
             ]);
 
             $this->handleResponse(
