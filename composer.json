@@ -1,5 +1,6 @@
 {
     "require": {
-        "dealt/dealt-sdk": "^0.0.9"
+        "dealt/dealt-sdk": "^0.0.9",
+        "giggsey/libphonenumber-for-php": "^8.12"
     }
 }
