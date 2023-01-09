@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
-
 
 class DealtTools
 {
@@ -142,13 +138,7 @@ class DealtTools
      */
     public static function formatPhoneNumberE164($phoneNumber, $countryCode)
     {
-        $phoneUtil = PhoneNumberUtil::getInstance();
-        try {
-            $proto = $phoneUtil->parse($phoneNumber, $countryCode);
-            return $phoneUtil->format($proto, PhoneNumberFormat::E164);
-        } catch (NumberParseException $e) {
-            return false;
-        }
+        return $phoneNumber;
     }
 
     /**
